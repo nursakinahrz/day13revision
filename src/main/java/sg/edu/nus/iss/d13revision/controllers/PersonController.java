@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.*;
 
 import sg.edu.nus.iss.d13revision.models.Person;
+import sg.edu.nus.iss.d13revision.models.PersonForm;
 import sg.edu.nus.iss.d13revision.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,7 @@ public class PersonController {
     @Value("${welcome.message}")
     private String message;
 
-    @Value("${error.message")
+    @Value("${error.message}")
     private String errorMessage;
 
     @RequestMapping(value={"/", "/home", "/index"}, method=RequestMethod.GET)
@@ -47,5 +48,35 @@ public class PersonController {
 
         return "personList";
     }
+
+    @RequestMapping(value="/addPerson", method=RequestMethod.GET)
+    public String showAddPersonPage(Model model) {
+        PersonForm pForm = new PersonForm();
+        model.addAttribute("personForm", pForm);
+        
+        return "addPerson";
+    }
+
+    @RequestMapping(value="/addPerson", method=RequestMethod.POST)
+    public String savePerson(Model model, @ModelAttribute("personForm") PersonForm personForm) {
+        
+        String fName = personForm.getFirstName();
+        String lName = personForm.getLastName();
+
+        if (fName !=null && fName.length() > 0 && lName !=null && lName.length() > 0){
+            Person newPerson = new Person(fName, lName);
+            perSvc.addPerson(newPerson);
+
+            return "redirect:/personList";
+
+ }
+
+    model.addAttribute("errorMessage", errorMessage);
+    return "addPerson";
+
+
+        
+    }
+
 
 }
