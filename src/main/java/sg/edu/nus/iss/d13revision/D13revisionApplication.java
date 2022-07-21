@@ -17,6 +17,7 @@ public class D13revisionApplication {
 
 		SpringApplication app = new SpringApplication(D13revisionApplication.class);
 
+		//when you specify the port then when you run the default 8085
 		String port="8085";
 		ApplicationArguments cliOpts = new DefaultApplicationArguments(args);
 
@@ -24,6 +25,8 @@ public class D13revisionApplication {
 			port = cliOpts.getOptionValues("port").get(0);
 		}
 
+		//this piece of code is to specify the port, so if you already specify in the application.properties
+		//then you dont need this code
 		app.setDefaultProperties(
 			Collections.singletonMap("server.port", port)
 		);
